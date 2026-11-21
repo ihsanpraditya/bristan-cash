@@ -21,6 +21,33 @@ it('renders successfully with accounts and categories', function () {
         ->assertSee('Dompet');
 });
 
+it('can record an expense transaction with thousand separator formatted nominal', function () {
+    Livewire::test(FinanceTracker::class)
+        ->call('openInput', 'keluar')
+        ->set('account_id', $this->account1->id)
+        ->set('category_id', $this->catKeluar->id)
+        ->set('nominal', '150.000')
+        ->set('keterangan', 'Beli stok bulanan')
+        ->call('saveTransaction')
+        ->assertHasNoErrors();
+
+    expect(Transaction::count())->toBe(1);
+
+    $trx = Transaction::first();
+    expect($trx->nominal)->toBe(150000);
+});
+
+it('formats nominal when using quickAmount buttons', function () {
+    $component = Livewire::test(FinanceTracker::class)
+        ->call('openInput', 'keluar')
+        ->call('quickAmount', 50000)
+        ->assertSet('nominal', '50.000')
+        ->call('quickAmount', 20000)
+        ->assertSet('nominal', '70.000')
+        ->call('quickAmount', '000')
+        ->assertSet('nominal', '70.000.000');
+});
+
 it('can record an expense transaction', function () {
     Livewire::test(FinanceTracker::class)
         ->call('openInput', 'keluar')

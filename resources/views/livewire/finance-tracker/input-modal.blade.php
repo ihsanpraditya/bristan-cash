@@ -38,11 +38,21 @@
 
             <form wire:submit="saveTransaction" class="space-y-4">
                 {{-- Input Nominal Gede --}}
-                <div>
+                <div x-data="{
+                    formatRupiah(el) {
+                        let clean = el.value.replace(/[^0-9]/g, '');
+                        if (!clean) {
+                            el.value = '';
+                            return;
+                        }
+                        el.value = new Intl.NumberFormat('id-ID').format(clean);
+                    }
+                }">
                     <label class="block text-xs font-bold uppercase tracking-wider text-neutral-500 mb-1">Nominal (Rp)</label>
                     <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-neutral-400">Rp</span>
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-neutral-400 pointer-events-none">Rp</span>
                         <input type="tel" inputmode="numeric" wire:model="nominal"
+                            x-on:input="formatRupiah($event.target)"
                             placeholder="0" autofocus
                             class="w-full pl-12 pr-4 py-3.5 text-2xl font-black rounded-2xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
                     </div>

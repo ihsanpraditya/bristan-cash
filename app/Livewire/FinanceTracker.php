@@ -63,9 +63,9 @@ class FinanceTracker extends Component
     public string $type = 'keluar';
 
     /**
-     * Form state: Transaction amount.
+     * Form state: Transaction amount (formatted with thousand separators).
      */
-    public string|int $nominal = '';
+    public string $nominal = '';
 
     /**
      * Form state: Source account ID.
@@ -170,10 +170,12 @@ class FinanceTracker extends Component
 
         if ($value === '000') {
             if ($current > 0) {
-                $this->nominal = (int) ($current * 1000);
+                $new = (int) ($current * 1000);
+                $this->nominal = number_format($new, 0, ',', '.');
             }
         } else {
-            $this->nominal = (int) ($current + (int) $value);
+            $new = (int) ($current + (int) $value);
+            $this->nominal = number_format($new, 0, ',', '.');
         }
     }
 
@@ -182,7 +184,7 @@ class FinanceTracker extends Component
      */
     public function setNominalDirect(int $value): void
     {
-        $this->nominal = $value;
+        $this->nominal = number_format($value, 0, ',', '.');
     }
 
     /**
@@ -199,7 +201,7 @@ class FinanceTracker extends Component
         $this->account_id = $transaction->account_id;
         $this->target_account_id = $transaction->target_account_id;
         $this->category_id = $transaction->category_id;
-        $this->nominal = $transaction->nominal;
+        $this->nominal = number_format($transaction->nominal, 0, ',', '.');
         $this->tanggal = $transaction->tanggal->toDateString();
         $this->keterangan = $transaction->keterangan;
 
@@ -212,7 +214,7 @@ class FinanceTracker extends Component
     public function saveTransaction(): void
     {
         $cleanedNominal = (int) preg_replace('/[^0-9]/', '', (string) $this->nominal);
-        $this->nominal = $cleanedNominal;
+        $nominalForValidation = $cleanedNominal > 0 ? $cleanedNominal : null;
 
         $rules = [
             'type' => ['required', 'in:keluar,masuk,transfer'],
@@ -230,7 +232,15 @@ class FinanceTracker extends Component
             $this->target_account_id = null;
         }
 
-        $validated = $this->validate($rules, [
+        $validator = validator([
+            'type' => $this->type,
+            'nominal' => $nominalForValidation,
+            'tanggal' => $this->tanggal,
+            'keterangan' => $this->keterangan,
+            'account_id' => $this->account_id,
+            'target_account_id' => $this->target_account_id,
+            'category_id' => $this->category_id,
+        ], $rules, [
             'nominal.min' => 'Nominal harus lebih dari 0 ya.',
             'nominal.required' => 'Nominal jangan lupa diisi ya.',
             'account_id.required' => 'Pilih rekening/dompet sumber.',
@@ -238,6 +248,14 @@ class FinanceTracker extends Component
             'target_account_id.different' => 'Rekening tujuan harus beda dari rekening asal.',
             'category_id.required' => 'Pilih salah satu kategori.',
         ]);
+
+        if ($validator->fails()) {
+            $this->setErrorBag($validator->getMessageBag());
+
+            return;
+        }
+
+        $validated = $validator->validated();
 
         if ($this->isEditing && $this->targetTransactionId !== null) {
             $transaction = Transaction::findOrFail($this->targetTransactionId);
