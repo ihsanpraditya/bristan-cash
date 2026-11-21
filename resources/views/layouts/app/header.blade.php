@@ -56,6 +56,9 @@
                     <flux:sidebar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard')  }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="arrows-right-left" :href="route('debts.index')" :current="request()->routeIs('debts.*')" wire:navigate>
+                        {{ __('Hutang & Pinjaman') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

@@ -30,7 +30,14 @@ description: Workflow and UX rules for building the family finance web app tailo
    - Tengah: Filter ringkas (Hari Ini, Minggu Ini, Bulan Ini) & List Transaksi terbaru.
    - Bawah: Tombol aksi utama (FAB / Bottom Sheet) yang mudah dijangkau satu tangan untuk catat Pengeluaran (Merah), Pemasukan (Hijau), atau Pindah Saldo (Biru).
 4. **No Guilt / Tanpa Tekanan:** Jangan ada notifikasi atau warna merah menyeramkan yang membuat istri merasa "bersalah" saat belanja.
-5. **Dilarang di V1:** Grafik rumit, split bill, multi-currency, foto struk OCR, budgeting/target hemat ketat.
+5. **Konvensi Hutang Piutang (Ramah Istri):**
+   - Dilarang memakai istilah kaku akuntansi seperti "Piutang / Accounts Receivable".
+   - Gunakan istilah:
+     - 🟢 **"Dipinjam Orang"** (Uang kita yang dipinjam teman/saudara, menunggu dikembalikan).
+     - 🔴 **"Hutang Kita"** (Uang yang kita pinjam dan perlu kita kembalikan).
+   - Terintegrasi langsung dengan mutasi kas (saat pinjamkan uang: saldo rekening berkurang; saat uang kembali: saldo bertambah).
+   - Mendukung pelunasan langsung maupun cicilan bertahap tanpa pusing.
+6. **Dilarang di V1:** Grafik rumit, split bill, multi-currency, foto struk OCR, budgeting/target hemat ketat.
 
 ## Database Schema (Minimalis & Praktis)
 - `accounts`: `id`, `nama`, `saldo_awal` (bigint), `warna`, `icon`, `timestamps`
@@ -45,6 +52,24 @@ description: Workflow and UX rules for building the family finance web app tailo
   - `keterangan` (string, nullable)
   - `tanggal` (date, default today)
   - `timestamps`
+- `debts`:
+  - `id`
+  - `type`: `dipinjam_orang` | `kita_pinjam`
+  - `nama_orang`: string
+  - `nominal_total`: bigint
+  - `keterangan`: string, nullable
+  - `jatuh_tempo`: date, nullable
+  - `status`: `belum_lunas` | `lunas`
+  - `timestamps`
+- `debt_payments`:
+  - `id`
+  - `debt_id`: FK debts
+  - `account_id`: FK accounts
+  - `transaction_id`: FK transactions, nullable
+  - `nominal`: bigint
+  - `tanggal`: date
+  - `catatan`: string, nullable
+  - `timestamps`
 
 ### Aturan Perhitungan Saldo
 Saldo akun **TIDAK DISIMPAN** sebagai angka statis di tabel `accounts`. Saldo dihitung secara dinamis untuk mencegah korupsi data:
@@ -54,6 +79,7 @@ Saldo akun **TIDAK DISIMPAN** sebagai angka statis di tabel `accounts`. Saldo di
 - [ ] Kartu saldo tiap akun/dompet (Total Saldo Keluarga + rincian per rekening).
 - [ ] Catat Pengeluaran & Pemasukan super cepat (< 10 detik).
 - [ ] Fitur "Pindah Saldo / Tarik Tunai" (misal: BCA ke Dompet Tunai / GoPay) dengan 1 input form.
+- [ ] Fitur "Hutang & Pinjaman" ramah istri (Dipinjam Teman / Hutang Kita, bisa cicil/lunas & sinkron mutasi kas).
 - [ ] Edit & hapus transaksi langsung di tempat via Modal / Inline.
 - [ ] Filter sederhana: Hari Ini / Minggu Ini / Bulan Ini + filter per Akun/Kategori.
 - [ ] Ekspor ke CSV / Excel 1-klik langsung unduh ke HP.

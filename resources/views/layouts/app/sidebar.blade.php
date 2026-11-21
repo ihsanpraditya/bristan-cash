@@ -24,6 +24,9 @@
                     <flux:sidebar.item icon="chart-bar" :href="route('budgets.index')" :current="request()->routeIs('budgets.*')" wire:navigate>
                         {{ __('Anggaran Belanja') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="arrows-right-left" :href="route('debts.index')" :current="request()->routeIs('debts.*')" wire:navigate>
+                        {{ __('Hutang & Pinjaman') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
