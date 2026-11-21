@@ -38,3 +38,7 @@ yarn-error.log
 /boost.json
 /opencode.json
 /opencode.jsonc
+
+laravel_core.zip
+laravel_public.zip
+production.sqlite
