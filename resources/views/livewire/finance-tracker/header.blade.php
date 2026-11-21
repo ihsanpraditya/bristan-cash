@@ -35,6 +35,14 @@
             <span x-text="isOnline ? 'Online' : 'Offline'"></span>
         </div>
 
+        {{-- Tombol Cepat Anggaran --}}
+        <a href="{{ route('budgets.index') }}" wire:navigate
+            title="Kelola Anggaran Belanja"
+            class="flex items-center gap-1 px-2.5 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 text-xs font-bold transition">
+            <span>🎯</span>
+            <span class="hidden sm:inline">Anggaran</span>
+        </a>
+
         {{-- Export CSV 1-Klik --}}
         <button type="button" wire:click="exportCsv" wire:loading.attr="disabled"
             title="Unduh catatan ke Excel / CSV"
