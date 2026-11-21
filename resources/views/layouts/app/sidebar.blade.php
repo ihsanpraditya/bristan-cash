@@ -18,6 +18,9 @@
                     <flux:sidebar.item icon="wallet" :href="route('accounts.index')" :current="request()->routeIs('accounts.*')" wire:navigate>
                         {{ __('Dompet & Rekening') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="tag" :href="route('categories.index')" :current="request()->routeIs('categories.*')" wire:navigate>
+                        {{ __('Kategori Catatan') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
