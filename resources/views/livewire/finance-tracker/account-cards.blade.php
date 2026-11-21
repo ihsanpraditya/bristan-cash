@@ -1,7 +1,12 @@
 {{-- Kartu Rekening / Dompet (Scroll Horizontal) --}}
 <div class="mb-5">
     <div class="flex items-center justify-between mb-2">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Dompet & Rekening</h2>
+        <div class="flex items-center gap-2">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Dompet & Rekening</h2>
+            <a href="{{ route('accounts.index') }}" wire:navigate class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+                Kelola ⚙️
+            </a>
+        </div>
         @if ($filterAccountId !== null)
             <button type="button" wire:click="$set('filterAccountId', null)" class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
                 Reset Filter
