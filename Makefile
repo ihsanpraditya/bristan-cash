@@ -55,7 +55,7 @@ zip-pisah:
 		-x ".cursor/*" \
 		-x ".gemini/*" \
 		-x "*.zip" \
-		-x "database/dev.sqlite"
+		-x "database/*"
 
 	@echo "📂 Packaging public folder contents (laravel_public.zip)..."
 	cd public && zip -r ../$(PUBLIC_ZIP) . -x "hot" -x "*.DS_Store" && cd ..
@@ -104,7 +104,7 @@ zip-nyatu:
 		-x ".gemini/*" \
 		-x "*.zip" \
 		-x "public/hot" \
-		-x "database/dev.sqlite"
+		-x "database/*"
 
 	@echo "🔄 Restoring development SQLite database..."
 	@if [ -f database/dev.sqlite ]; then mv -f database/dev.sqlite $(DB_DEV); fi
