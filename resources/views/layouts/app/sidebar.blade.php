@@ -21,6 +21,9 @@
                     <flux:sidebar.item icon="tag" :href="route('categories.index')" :current="request()->routeIs('categories.*')" wire:navigate>
                         {{ __('Kategori Catatan') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="chart-pie" :href="route('expenses.analysis')" :current="request()->routeIs('expenses.analysis')" wire:navigate>
+                        {{ __('Analisis Belanja') }}
+                    </flux:sidebar.item>
                     <flux:sidebar.item icon="chart-bar" :href="route('budgets.index')" :current="request()->routeIs('budgets.*')" wire:navigate>
                         {{ __('Anggaran Belanja') }}
                     </flux:sidebar.item>
