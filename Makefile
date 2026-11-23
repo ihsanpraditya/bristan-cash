@@ -58,7 +58,7 @@ zip-pisah:
 		-x "database/*"
 
 	@echo "📂 Packaging public folder contents (laravel_public.zip)..."
-	cd public && zip -r ../$(PUBLIC_ZIP) . -x "hot" -x "*.DS_Store" && cd ..
+	cd public && zip -r ../$(PUBLIC_ZIP) . -x "hot" -x "*.DS_Store" -x "index.php" && cd ..
 
 	@echo "🔄 Restoring development SQLite database..."
 	@if [ -f database/dev.sqlite ]; then mv -f database/dev.sqlite $(DB_DEV); fi

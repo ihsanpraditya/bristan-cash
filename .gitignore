@@ -42,3 +42,4 @@ yarn-error.log
 laravel_core.zip
 laravel_public.zip
 production.sqlite
+vite.config.mine.js
